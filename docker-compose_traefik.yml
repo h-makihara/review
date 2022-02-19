@@ -1,0 +1,16 @@
+version: '3.3'
+
+services:
+  faq_front:
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.port=8282
+      - traefik.backend=review_api
+      - traefik.passHostHeader=true
+      - traefik.frontend.rule=PathPrefix:/review/
+      # wordpress のTraefik上のバックエンド名を記載
+      - "traefik.docker.network=web"
+      - "traefik.frontend.entryPoints=http"
+      - "traefik.protocol=http"

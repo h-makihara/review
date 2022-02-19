@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  return_data:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      args:
+          - http_proxy=$http_proxy
+          - https_proxy=$http_proxy
+    container_name: review_api
+    ports:
+      - 8282:8282
+    volumes:
+      - './api/sources:/app:ro'
+    command: "python3 app.py"
+    tty: true
+
