@@ -8,11 +8,28 @@ services:
       args:
           - http_proxy=$http_proxy
           - https_proxy=$http_proxy
-    container_name: review_api
+    container_name: return_data
+    env_file:
+      - .env
     ports:
       - 8282:8282
     volumes:
       - './api/sources:/app:ro'
     command: "python3 app.py"
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.port=8282
+      - traefik.backend=return_data
+      - "traefik.frontend.rule=PathPrefixStrip:/review;ReplacePathRegex: ^/(.*) /$$1"
+      # wordpress のTraefik上のバックエンド名を記載
+      - "traefik.docker.network=web"
+      - "traefik.frontend.entryPoints=http"
+      - "traefik.protocol=http"
     tty: true
+
+networks:
+  web:
+    external: true
 
